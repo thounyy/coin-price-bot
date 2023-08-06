@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::env;
 
 use log::{error, info};
 use serde::Deserialize;
@@ -32,7 +33,9 @@ async fn main() {
         .init();
     info!("starting bot...");
 
-    let bot = Bot::from_env();
+    dotenv::dotenv().ok();
+
+    let bot = Bot::new(env::var("TOKEN").expect("Token not set"));
     Command::repl(bot, reply).await
 }
 
