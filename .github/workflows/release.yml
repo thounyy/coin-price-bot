@@ -1,23 +1,27 @@
-name: Release Binaries
+name: Release
 
-on: [push]
+permissions:
+  contents: write
+
+on:
+  push:
+    tags:
+      - v[0-9]+.*
 
 jobs:
-  build:
+  create-release:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v1
-
-      - name: Build
-        run: cargo build --all --release && strip target/release/coin-price-bot && mv target/release/coin-price-bot target/release/coin-price-bot_amd64
-
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
+      - uses: actions/checkout@v3
+      - uses: taiki-e/create-gh-release-action@v1
         with:
-          files: |
-            target/release/coin-price-bot_amd64
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  upload-assets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: taiki-e/upload-rust-binary-action@v1
+        with:
+          bin: coin-price-bot
+          token: ${{ secrets.GITHUB_TOKEN }}
