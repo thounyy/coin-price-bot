@@ -11,5 +11,5 @@ To test it, add @the_coin_price_bot on Telegram.
 1. `git clone https://github.com/Block-Runner/coin-price-bot.git`
 2. Install Rust.
 3. Setup your bot with @botfather.
-4. `export TELOXIDE_TOKEN=<YOUR_TOKEN_ID`
+4. Configure your `.env`
 5. In the directory: `cargo run`
